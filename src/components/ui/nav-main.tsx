@@ -2,7 +2,7 @@
 import React from 'react'
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../sidebar'
 
-type Props = {}
+
 
 const NavMain = ({items,
 }: {
@@ -21,22 +21,23 @@ const NavMain = ({items,
     return (
     <SidebarGroup className="p-0">
         <SidebarMenu>
-            <SidebarMenuItem>
+            {items.map((item)=>(
+                <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton 
                 asChild 
-                tooltip={'TEST'} 
-                className={`${pathname.includes('TEST') &&
-                'bg-background-80'}`}>
+                tooltip={item.title} 
+                className={`${pathname.includes(item.url) &&
+                'bg-muted'}`}>
                     <Link 
-                    href={'TEST'}
+                    href={item.url}
                     className={`text-lg ${
-                        pathname.includes('TEST') && 'font-bold'
+                        pathname.includes(item.url) && 'font-bold'
                     }`}>
-                        <Clock className="text-lg"/>
-                        <span>Test Sidebar item</span>
+                        <item.icon className="text-lg"></item.icon>
+                        <span>{item.title</span>
                     </Link>
                 </SidebarMenuButton>
-            </SidebarMenuItem>
+            </SidebarMenuItem>))}
         </SidebarMenu>
     </SidebarGroup>
     )

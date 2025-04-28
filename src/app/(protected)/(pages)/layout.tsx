@@ -6,7 +6,7 @@ import React from 'react'
 type Props ={children: React.ReactNode}
 
 const Layout =async ({children}: Props) => {
-        //const recent Projects = await getRecentProjects();
+        const recentProjects = await getRecentProjects();
     const checkUser = await onAuthenticateUser() 
 
     if(!checkUser.user){
@@ -15,9 +15,10 @@ const Layout =async ({children}: Props) => {
 
 
     return <SidebarProvider>
-        <AppSidebar>
-            
-        </AppSidebar>
+        <AppSidebar 
+        user = {checkUser.user}
+        recentProjects = {recentProjects.data || []} 
+        />          
     </SidebarProvider>
 }
 
