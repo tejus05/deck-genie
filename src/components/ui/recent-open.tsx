@@ -1,12 +1,19 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import{
-    SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem
+    SidebarGroup, 
+    SidebarGroupLabel, 
+    SidebarMenu, 
+    SidebarMenuButton, 
+    SidebarMenuItem
 } from '@/components/ui/sidebar'
 import { toast } from 'sonner'
 
 import { project } from '@prisma/client'
 import {JasonValue } from '@prisma /client/runtime/library'
 import React from 'react'
+import { useSlideStore } from '@/store/useSlideStore'
+import { useRouter } from 'next/navigation'
 
 type props = {
     recentprojects: Project[]
@@ -14,6 +21,10 @@ type props = {
 
 const RecentOpen = ({recentProjects}: Props) => {
     const router = useRouter()
+    const { setSlides } = useSlideStore()
+
+
+
     const handleClick = (projectId: string, slides:JsonValue) => {
         
         if(!projectId || !slides){
@@ -23,7 +34,7 @@ const RecentOpen = ({recentProjects}: Props) => {
             return
         }
 
-        SetSlides(JSON.parse(JSON.stringify(slides)))
+        setSlides(JSON.parse(JSON.stringify(slides)))
         router.push(`/presentation/${projectId}`)
     }
     return  recentProjects.length > 0 ? (
