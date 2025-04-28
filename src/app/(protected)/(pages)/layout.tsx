@@ -1,6 +1,7 @@
 import { onAuthenticateUser } from '@/actions/user'
-import AppSidebar from '@/components/ui/app-sidebar'
-import { SidebarProvider } from '@/components/ui/sidebar'
+import UpperInfoBar from '@/components/global/upper-info-bar'
+import AppSidebar from '@/components/global/app-slidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import React from 'react'
 
 type Props ={children: React.ReactNode}
@@ -18,7 +19,11 @@ const Layout =async ({children}: Props) => {
         <AppSidebar 
         user = {checkUser.user}
         recentProjects = {recentProjects.data || []} 
-        />          
+        />  
+        <SidebarInset>
+            <UpperInfoBar user={checkUser.user} />   
+            {children}
+        </SidebarInset>        
     </SidebarProvider>
 }
 

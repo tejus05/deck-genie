@@ -17,11 +17,23 @@ const Switch = React.forwardRef<
     {...props}
     ref={ref}
   >
+    {/*Moon Icon*/}
+    <Moon 
+      className = {cn(
+        'pointer-events-none block h-7 w-7 rounded-full bg-background shadow-lg ring-0 transition-transform duration-300 ease-in-out data-[state=checked]:translate-x-8 data-[state=unchecked]:translate-x-0'
+      )}
+      />
     <SwitchPrimitives.Thumb
       className={cn(
         "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0"
       )}
     />
+    {/*Sun Icon*/}
+    <Sun
+      className = {cn(
+        'pointer-events-none block h-4 w-4 absolute z-[1000] top-[10px] right-[19px] stroke-gray-600 fill-black transition-opacity duration-300 ease-in-out','data-[state=checked]:opacity-0 data-[state=unchecked]:opacity-100'
+      )}
+      />
   </SwitchPrimitives.Root>
 ))
 Switch.displayName = SwitchPrimitives.Root.displayName
