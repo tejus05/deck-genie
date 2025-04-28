@@ -47,6 +47,6 @@ export const onAuthenticateUser = async () => {
 
     } catch (error) {
         console.log('🔴 ERROR', error);
-        return { status: 500 };
+        return { status: 500 , error:'Intenal Server Error'};
     }
 };
