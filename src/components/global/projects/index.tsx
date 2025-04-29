@@ -23,11 +23,8 @@ const Projects = ({ projects }: Props) => {
                     createdAt={project?.createdAt.toString()}
                     isDelete={project?.isDeleted}
                     slideData={project?.slides}
-                    src={
-                        project.thumbnail ||
-                        // link to some basic image 
-                        ' '
-                    }
+                    themeName={project.themeName}
+                    
                 />
             ))}
 
