@@ -36,7 +36,7 @@ export const getAllProjects = async () => {
 export const getRecentProjects = async () => {
     try{
         const checkUser = await onAuthenticateUser()
-        if(checkUser.status !== 200 ||!checkUser.user){
+        if(checkUser.status !== 200 || !checkUser.user){
             return {status : 403, error : 'User not authenticated' }
         }
 
@@ -63,4 +63,15 @@ export const getRecentProjects = async () => {
         console.log('🔴 ERROR', error);
         return { status: 500 , error:'Intenal Server Error'};
     }
+}
+
+export const recoverProject = async (projectId: string) => {
+    try{
+        const checkUser = await onAuthenticateUser()
+
+        if(checkUser.status !== 200 || !checkUser.user){
+            return {status : 403, error : 'User not authenticated' }
+        }
+    }
+    catch(error) {}
 }
