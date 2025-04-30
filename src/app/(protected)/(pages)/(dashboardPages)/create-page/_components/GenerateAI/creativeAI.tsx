@@ -20,7 +20,16 @@ const CreateAI = ({ onBack }: Props) => {
   const [editText, setEditText] = useState('')
   const [noOfCards, setNoOfCards] = useState(0)
   const { currentAiPrompt, setCurrentAiPrompt, outlines, resetOutlines} = useCreativeAIStore()
-
+  
+  const {
+    outlines,
+    addOutline,
+    addMultipleOutlines,
+    resetOutlines,
+    currentAiPrompt,
+    setCurrentAiPromt,
+   
+  } = useCreativeAIStore()
   const handleBack = () => {
     onBack()
   }
@@ -132,7 +141,27 @@ const CreateAI = ({ onBack }: Props) => {
         </Button>
     </div>
 
-   <CardList />
+   <CardList 
+   outlines={outlines}
+   addOutline={addOutline}
+   addMultipleOutlines={addMultipleOutlines}
+   editingCard={editingCard}
+   selectedCard={selectedCard}
+   editText={editText}
+   onEditChange={setEditText}
+   onCardSelect={setselectedCard}
+   setEditText={setEditText}
+   setEditingCard={setEditingCard}
+   setSelectedCard={setselectedCard}
+   onCardDoubleClick={(id,title) => {
+    setEditingCard(id)
+    setEditText(title)
+   }}
+
+
+
+
+/>
 
   </motion.div>
   )
