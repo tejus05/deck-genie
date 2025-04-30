@@ -12,6 +12,11 @@ type Props = {
 
 const CreatePage = ({ onSelectOption}: Props) => {
     const { prompts, setPage } = usePromptStore()
+
+    useEffect(() => {
+        setPage('create')
+    }, [])
+
     return (
     <motion.div
     variants={containerVariants}
@@ -87,7 +92,7 @@ const CreatePage = ({ onSelectOption}: Props) => {
             ))}
         </motion.div>
 
-        <RecentPrompts/>
+        {prompts.length > 0 && <RecentPrompts/>}
 
     </motion.div>
     )
