@@ -19,8 +19,7 @@ const CreateAI = ({ onBack }: Props) => {
   const [selectedCard, setselectedCard] = useState<string | null>(null)
   const [editText, setEditText] = useState('')
   const [noOfCards, setNoOfCards] = useState(0)
-  const { currentAiPrompt, setCurrentAiPrompt, outlines, resetOutlines} = useCreativeAIStore()
-  
+  const {prompts,addPrompt} = usePromptStore();
   const {
     outlines,
     addOutline,
@@ -43,8 +42,20 @@ const CreateAI = ({ onBack }: Props) => {
     resetOutlines()
   }
 
- //  WIP :  const generateOutline = () => {}
+  const generateOutline = async () => {
+    if (currentAiPrompt === '') {
+      toast.error('Error', {
+        description: 'Please enter a prompt to generate an outline.',
+      });
+      return;
+    }
+  
+    setIsGenerating(true);
+    const res = await generateCreativePrompt(currentAiPrompt)
+    // WIP: use open AI and complete this function
+  };
 
+const handleGenerate= () => {}
   return (
   <motion.div
     className="space-y-6 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -128,7 +139,7 @@ const CreateAI = ({ onBack }: Props) => {
     <div className="w-full flex justify-center items-center">
         <Button 
             className="font-medium text-lg flex gap-2 items-center"
-            // onClick={generateOutline}
+             onClick={generateOutline}
             disabled={isGenerating}
         >
             {isGenerating ? (
@@ -157,11 +168,26 @@ const CreateAI = ({ onBack }: Props) => {
     setEditingCard(id)
     setEditText(title)
    }}
-
-
-
-
 />
+
+{outlines.length > 0 && (
+  <Button
+    className="w-full"
+    onClick={handleGenerate}
+    disabled={isGenerating}
+  >
+    {isGenerating ? (
+      <>
+        <Loader2 className="animate-spin mr-2" /> Generating...
+      </>
+    ) : (
+      'Generate'
+    )}
+  </Button>
+)}
+
+{prompts?.length > 0 && RecentPrompts />}
+
 
   </motion.div>
   )
