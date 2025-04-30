@@ -1,5 +1,5 @@
 import React from 'react'
-import { getAllProjects } from '@/actions/projects'
+import { getAllProjects } from '@/actions/project'
 import NotFound from '@/components/global/not-found'
 
 const DashboardPage = async () => {

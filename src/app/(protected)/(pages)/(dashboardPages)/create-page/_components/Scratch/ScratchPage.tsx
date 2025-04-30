@@ -20,7 +20,7 @@ import {Input} from '@/components/ui/input'
 import CardList from '../Common/Cardlist'
 import { OutlineCard } from '@/lib/types'
 import {toast} from 'sonner'
-import { createProject } from '@/actions/projects'
+import { createProject } from '@/actions/project'
 
 type Props = {
   onBack: () => void

@@ -1,12 +1,20 @@
 'use client'
+import { generateCreativePrompt } from '@/actions/chatgpt'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { containerVariants, itemVariants } from '@/lib/constants'
+import { OutlineCard } from '@/lib/types'
 import useCreativeAIStore from '@/store/useCreativeAIStore'
 import { motion } from 'framer-motion'
 import {useRouter } from 'next/navigation'
 import React from 'react'
+import { useEffect, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import CardList from '../Common/Cardlist'
+import RecentPrompts from './RecentPrompts'
+import { createProject } from '@/actions/project'
+import { useSlideStore } from '@/store/useSlideStore'
 
 type Props = {
     onBack: () => void
@@ -14,8 +22,9 @@ type Props = {
 
 const CreateAI = ({ onBack }: Props) => {
   const router = useRouter()
+  const { setProject } = useSlideStore()
   const [editingCard, setEditingCard] = useState<string | null>(null)
-  const [isGenerating, setisGenerating] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
   const [selectedCard, setselectedCard] = useState<string | null>(null)
   const [editText, setEditText] = useState('')
   const [noOfCards, setNoOfCards] = useState(0)
@@ -26,7 +35,7 @@ const CreateAI = ({ onBack }: Props) => {
     addMultipleOutlines,
     resetOutlines,
     currentAiPrompt,
-    setCurrentAiPromt,
+    setCurrentAiPrompt,
    
   } = useCreativeAIStore()
   const handleBack = () => {
@@ -50,12 +59,78 @@ const CreateAI = ({ onBack }: Props) => {
       return;
     }
   
-    setIsGenerating(true);
+    setIsGenerating(true)
     const res = await generateCreativePrompt(currentAiPrompt)
-    // WIP: use open AI and complete this function
-  };
+    if (res.status === 200 && res?.data?.outlines) {
+      const cardData: OutlineCard[] = []
+      res.data?.outlines.map((outline: string, idx: number) => {
+        const newCard = {
+          id: uuid(),
+          title: outline,
+          order: idx + 1,
+        }
+        cardData.push(newCard)
+    })
+    addMultipleOutlines(cardData)
+    setNoOfCards(cardData.length)
+    Toaster.success("Success", {
+      description: 'Outline generated successfully!'
+    })
+    }
+    else{
+      toast.error('Error', {
+        description: 'Failed to generate outline, please try again.',
+      })
+    }
+    setIsGenerating(false)
+  }
 
-const handleGenerate= () => {}
+  
+const handleGenerate= async () => {
+  setIsGenerating(true)
+  if (outlines.length === 0) {
+    toast.error('Error', {
+      description: 'Please add at least one card to generate slides',
+    })
+    return
+  }
+  try {
+    const res = await createProject(currentAiPrompt, outlines.slice(0, noOfCards))
+    if (res.status !== 200 || !res.data) {
+      throw new Error('Unable to create project')
+      }
+
+      router.push(`/presentation/${res.data.id}/select-theme`)
+      setProject(res.data)
+
+      addPrompt({
+        id: v4(),
+        title: currentAiPrompt || outlines[0]?.title,
+        outlines: outlines,
+        createdAt: new Date().toISOString(),
+      })
+
+      toast.success('Success', {
+        description: 'Project created successfully!',
+      })
+      setCurrentAiPrompt('')
+      resetOutlines()
+
+  } catch (error) {
+    console.log(error)
+      toast.error('Error', {
+        description: 'Failed to create project. Please try again.',
+      })
+  } finally {
+    setIsGenerating(false)
+  }
+}
+
+  useEffect(() => {
+    setNoOfCards(outlines.length)
+
+  }, [outlines.length])
+
   return (
   <motion.div
     className="space-y-6 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
