@@ -7,12 +7,14 @@ import React from 'react'
 import { containerVariants } from '@/lib/constants'
 import {Button} from '@/components/ui/button'
 import {ChevronLeft} from 'lucide-react'
+import useScratchStore from '@/store/useStartScratchStore'
 type Props = {
   onBack: () => void
 }
 
 const ScratchPage = ({ onBack }: Props) => {
   const router = useRouter()
+  const {outlines,resetOutlines,addOutline,addMultipleOutlines} = useScratchStore()
 
   const handleback = () => {
     resetOutlines()
@@ -34,7 +36,10 @@ const ScratchPage = ({ onBack }: Props) => {
         <ChevronLeft className="mr-2 h-4 w-4" />
         Back
       </Button>
-
+      <h1 className="text-2xl sm:text-3xl font-bold text-primary text-left"> Prompt </h1>
+    <motion.div>
+        
+    </motion.div>
     </motion.div>
   )
 }
