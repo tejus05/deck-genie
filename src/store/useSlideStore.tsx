@@ -31,8 +31,9 @@ export const useSlideStore = create
     setSlides: (slides: Slide[]) => set({ slides }),
     setProjects:(project)=> set({project}),
     currentTheme: defaultTheme,
-    setCurrentTheme: () => {}
-}),
+    setCurrentTheme: (theme: Theme) => set({ currentTheme:
+        theme }),
+ }),
  {
     name: 'slides-storage',
 }
