@@ -10,6 +10,8 @@ interface SlideState {
     SetSliders: (slides: Slide[]) => void
     currentTheme: Theme
     setCurrentTheme: (theme: Theme) => void
+    getOrderedSlides: () => Slide[]
+    reorderSlides: (fromIndex: number, toIndex: number) => void
 }
 
 const defaultTheme: Theme = {
@@ -25,7 +27,7 @@ const defaultTheme: Theme = {
 
 export const useSlideStore = create 
 (persist<SlideState>(
-    (set) => ({
+    (set, get) => ({
     project:null,
     slides: [],
     setSlides: (slides: Slide[]) => set({ slides }),
@@ -33,7 +35,25 @@ export const useSlideStore = create
     currentTheme: defaultTheme,
     setCurrentTheme: (theme: Theme) => set({ currentTheme:
         theme }),
+    getOrderedSlides: () => {
+        const state = get()
+        return [...state.slides].sort((a,b)=> a.slideOrder - b.slideOrder)
+    },
+    reorderSlides: (fromIndex: number, toIndex: number) => {
+        set((state)=>{
+            const newSlides = [...state.slides]
+            const [removed] = newSlides.splice(fromIndex, 1)
+            newSlides.splice(toIndex, 0, removed)
+            return{
+                slides: newSlides.map((slide, index) => ({
+                    ...slide,
+                    slideOrder: index,
+                })),
+            }
+        })
+    },
  }),
+
  {
     name: 'slides-storage',
 }

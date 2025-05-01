@@ -142,6 +142,11 @@ const rightCardContent = (
     </div>
 )
 
+const applyTheme = (theme: Theme) => {
+    setSelectedTheme(theme)
+    setCurrentTheme(theme)
+}
+
  return (
     <div
         className="h-screen w-full flex"
@@ -169,10 +174,38 @@ const rightCardContent = (
                     Back
                 </Button>
                 <div className="w-full flex justify-center items-center relative flex-grow">
-                    <ThemeCard />
+                    <ThemeCard 
+                        title="Quick Start"
+                        description="Get up and running in no time"
+                        content={leftCardContent}
+                        variant="left"
+                        theme={selectedTheme}
+                        controls={controls}
+                    />
+                    <ThemeCard 
+                        title="Main Preview"
+                        description="This is the main theme preview card"
+                        content={mainCardContent}
+                        variant="main"
+                        theme={selectedTheme}
+                        controls={controls}
+                    />
+                    <ThemeCard 
+                        title="Theme Features"
+                        description="Discover what our themes can do"
+                        content={rightCardContent}
+                        variant="right"
+                        theme={selectedTheme}
+                        controls={controls}
+                    />
                 </div>
             </div>
         </div>
+        <ThemePicker
+        selectedTheme={selectedTheme}
+        themes={themes}
+        onThemeSelect={applyTheme}
+        />
     </div>
  )
 }
