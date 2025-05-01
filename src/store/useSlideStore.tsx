@@ -2,16 +2,20 @@ import { Slide, Theme } from '@/lib/types'
 import { Project } from '@/lib/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { v4 as uuidv4 } from 'uuid'
 
 interface SlideState {
     slides: Slide[]
     project: Project| null 
     setProject: (id: Project) => void
     SetSliders: (slides: Slide[]) => void
+    currentSlide: number
     currentTheme: Theme
+    removeSlide: (id: string) => void
     setCurrentTheme: (theme: Theme) => void
     getOrderedSlides: () => Slide[]
     reorderSlides: (fromIndex: number, toIndex: number) => void
+    addSlideAtIndex: (slide: Slide, index: number) => void
 }
 
 const defaultTheme: Theme = {
@@ -32,6 +36,7 @@ export const useSlideStore = create
     slides: [],
     setSlides: (slides: Slide[]) => set({ slides }),
     setProjects:(project)=> set({project}),
+    currentSlide: 0,
     currentTheme: defaultTheme,
     setCurrentTheme: (theme: Theme) => set({ currentTheme:
         theme }),
@@ -39,6 +44,20 @@ export const useSlideStore = create
         const state = get()
         return [...state.slides].sort((a,b)=> a.slideOrder - b.slideOrder)
     },
+    addSlideAtIndex: (slide: Slide, index: number) => 
+        set((state) =>{
+            const newSlides = [...state.slides]
+            newSlides.splice(index, 0, { ...slide, id: uuidv4() })
+            newSlides.forEach((s,i) => {
+                s.slideOrder = i
+            })
+
+            return { slides: newSlides, currentSlide: index}
+        }),
+    removeSlide: (id) => 
+        set((state) => ({
+            slides: state.slides.filter((slide) => slide.id !==id),
+        })),
     reorderSlides: (fromIndex: number, toIndex: number) => {
         set((state)=>{
             const newSlides = [...state.slides]
