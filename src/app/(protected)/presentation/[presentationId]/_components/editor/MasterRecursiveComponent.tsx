@@ -3,6 +3,7 @@ import { Heading1 } from '@/components/global/editor/components/Headings';
 import { ContentItem } from '@/lib/types'
 import {motion} from 'framer-motion'
 import React, {useCallback} from 'react'
+import { DropZone } from './Editor';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem;
@@ -40,10 +41,52 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
 
     switch (content.type) {
       case 'heading1':
-        return( <motion.div className="w-full h-full">
+        return( <motion.div className="w-full h-full"
+          {...animationProps}
+          >
             <Heading1 {...commonProps}/>
         </motion.div>
         )
+        case 'heading2':
+          return( <motion.div className="w-full h-full"
+            {...animationProps}
+            >
+              <Heading2 {...commonProps}/>
+          </motion.div>
+          )
+          case 'heading3':
+            return( <motion.div className="w-full h-full"
+              {...animationProps}
+              >
+                <Heading3 {...commonProps}/>
+            </motion.div>
+            )
+            case 'heading4':
+              return( <motion.div className="w-full h-full"
+                {...animationProps}
+                >
+                  <Heading4 {...commonProps}/>
+              </motion.div>
+              )
+              case 'title':
+                return( <motion.div className="w-full h-full"
+                  {...animationProps}
+                  >
+                    <Title {...commonProps}/>
+                </motion.div>
+                )
+                case 'paragraph':
+        return( <motion.div className="w-full h-full"
+          {...animationProps}
+          >
+            <Paragraph {...commonProps}/>
+        </motion.div>
+        )
+      
+                
+        
+      
+
         case 'column':
   if (Array.isArray(content.content)) {
     return (
@@ -51,24 +94,58 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
         {...animationProps}
         className={cn('w-full h-full flex flex-col', content.className)}
       >
-        {content.content.length > 0
-          ? (content.content as ContentItem[]).map(
+        {content.content.length > 0         ? (
+          (content.content as ContentItem[]).map(
               (subItem: ContentItem, subIndex: number) => (
                 <React.Fragment key={subItem.id || `item-${subIndex}`}>
                   {!isPreview &&
                     !subItem.restrictToDrop &&
                     subIndex === 0 &&
-                    isEditable && <DropZone />}
+                    isEditable && <DropZone
+                    index={0}
+                    parentId={content.id}
+                    slideId={slideId}
+                     />
+                     )}
+                     <React.Fragment key={subItem.id || item-${subIndex}}>
+  <MasterRecursiveComponent
+    content={subItem}
+    onContentChange={onContentChange}
+    isPreview={isPreview}
+    slideId={slideId}
+    index={subIndex}
+    isEditable={isEditable}
+  />
+
+  {!isPreview &&
+    !subItem.restrictToDrop &&
+    isEditable && (
+      <DropZone
+        index={subIndex + 1}
+        parentId={content.id}
+        slideId={slideId}
+      />
+    )}
+
                 </React.Fragment>
+               ) 
               )
-            )
-          : ''}
+            
+            
+         ) :  isEditable ? (
+              <DropZone 
+              index={0}
+              parentId={content.id}
+              slideId={slideId}
+              />
+            ) : null}
       </motion.div>
     );
   }
+  return null
 
       default:
-        return <h1>Nothing</h1>
+        return null
     }
   }
 );
