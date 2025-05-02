@@ -40,9 +40,33 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
 
     switch (content.type) {
       case 'heading1':
-        return <motion.div className="w-full h-full">
+        return( <motion.div className="w-full h-full">
             <Heading1 {...commonProps}/>
-        </motion.div>;
+        </motion.div>
+        )
+        case 'column':
+  if (Array.isArray(content.content)) {
+    return (
+      <motion.div
+        {...animationProps}
+        className={cn('w-full h-full flex flex-col', content.className)}
+      >
+        {content.content.length > 0
+          ? (content.content as ContentItem[]).map(
+              (subItem: ContentItem, subIndex: number) => (
+                <React.Fragment key={subItem.id || `item-${subIndex}`}>
+                  {!isPreview &&
+                    !subItem.restrictToDrop &&
+                    subIndex === 0 &&
+                    isEditable && <DropZone />}
+                </React.Fragment>
+              )
+            )
+          : ''}
+      </motion.div>
+    );
+  }
+
       default:
         return <h1>Nothing</h1>
     }
@@ -52,6 +76,41 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
 
 ContentRenderer.displayName= 'ContentRenderer'
 
-export const MasterRecursiveComponent : React.FC<MasterRecursiveComponentProps>
-=
+export const MasterRecursiveComponent: React.FC<MasterRecursiveComponentProps> = React.memo(
+  ({
+    content,
+    onContentChange,
+    slideId,
+    index,
+    isPreview = false,
+    isEditable = true,
+  }) => {
+    if (isPreview) {
+      return (
+        <ContentRenderer
+          content={content}
+          onContentChange={onContentChange}
+          isPreview={isPreview}
+          isEditable={isEditable}
+          slideId={slideId}
+          index={index}
+        />
+      )
+    }
 
+    return (
+      <React.Fragment>
+        <ContentRenderer
+          content={content}
+          onContentChange={onContentChange}
+          isPreview={isPreview}
+          isEditable={isEditable}
+          slideId={slideId}
+          index={index}
+        />
+      </React.Fragment>
+    )
+  }
+)
+
+MasterRecursiveComponent.displayName = 'MasterRecursiveComponent'
