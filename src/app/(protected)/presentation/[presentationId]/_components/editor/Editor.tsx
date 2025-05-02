@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { v4 as uuidv4 } from 'uuid'
 import { useSlideStore } from '@/store/useSlideStore';
 import { LayoutSlides } from '@/lib/types';
-import React from 'react';
+import React, {useEffect,useRef,useState} from 'react';
 
 
 interface DropZoneProps {
@@ -80,10 +80,42 @@ interface DraggableSlideProps {
     isEditable,
   }) => {
     const refuseRef = null;
-    const { currentSlide, setCurrentSlide, currentTheme, updateContentItem } = useSlideStore();
+    const { currentSlide, setCurrentSlide, currentTheme, updateContentItem } = useSlideStore()
+    const [{ isDragging }, drag] = useDrag({
+        type: 'SLIDE',
+        item: {
+          index,
+          type: 'SLIDE',
+        },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+        canDrag: isEditable,
+      })
   
-    return <><></></>;
-  };
+    return (
+        <div
+          ref={ref}
+          className={cn(
+            'w-full rounded-lg shadow-lg relative p-0 min-h-[400px] max-h-[800px]',
+            'shadow-xl transition-shadow duration-300',
+            'flex flex-col',
+            index === currentSlide ? 'ring-2 ring-blue-500 ring-offset-2' : '',
+            slide.className,
+            isDragging ? 'opacity-50' : 'opacity-100'
+          )}
+          style={{
+            backgroundImage: currentTheme.gradientBackground,
+          }}
+          onClick={() => setCurrentSlide(index)}
+        >
+        <div className="h-full w-full flex-grow overflow-hidden">
+            <MasterRecursiveComponent />
+
+            </div>
+            </div>
+      )
+  }
 
 type Props = {
   isEditable: boolean;
