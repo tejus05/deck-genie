@@ -64,8 +64,26 @@ if (!isEditable) return null
     </div>
     )
 }
+interface DraggableSlideProps {
+    slide: Slide
+    index: number
+    moveSlide: (dragIndex: number, hoverIndex: number) => void
+    handleDelete: (id: string) => void
+    isEditable: boolean
+  }
 
-export const DraggableSlide: React.FC<>
+  export const DraggableSlide: React.FC<DraggableSlideProps> = ({
+    slide,
+    index,
+    moveSlide,
+    handleDelete,
+    isEditable,
+  }) => {
+    const refuseRef = null;
+    const { currentSlide, setCurrentSlide, currentTheme, updateContentItem } = useSlideStore();
+  
+    return <><></></>;
+  };
 
 type Props = {
   isEditable: boolean;

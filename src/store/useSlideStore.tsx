@@ -16,6 +16,8 @@ interface SlideState {
     getOrderedSlides: () => Slide[]
     reorderSlides: (fromIndex: number, toIndex: number) => void
     addSlideAtIndex: (slide: Slide, index: number) => void
+    setCurentSlide: (index:number) => void
+    updateContentItem: (slideId:string,contentId:string,newContent:string | string[] | string[][]) => void
 }
 
 const defaultTheme: Theme = {
@@ -58,6 +60,8 @@ export const useSlideStore = create
         set((state) => ({
             slides: state.slides.filter((slide) => slide.id !==id),
         })),
+        
+        setCurrentSlides: (index) => set({currentSlide: index}),
     reorderSlides: (fromIndex: number, toIndex: number) => {
         set((state)=>{
             const newSlides = [...state.slides]
