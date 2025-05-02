@@ -44,8 +44,14 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
             <Heading1 {...commonProps}/>
         </motion.div>;
       default:
-        return null;
+        return <h1>Nothing</h1>
     }
   }
 );
+
+
+ContentRenderer.displayName= 'ContentRenderer'
+
+export const MasterRecursiveComponent : React.FC<MasterRecursiveComponentProps>
+=
 
