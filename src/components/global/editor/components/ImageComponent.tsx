@@ -1,3 +1,4 @@
+import UploadImage from '@/app/(protected)/presentation/[presentationId]/_components/editor/UploadImage'
 import React from 'react'
 
 type Props = {
@@ -22,6 +23,7 @@ const CustomImage = ({
     onContentChange,
     isEditable = true,
 }: Props) => {
+    //WIP: add open ai
   return <div className={`relative group w-full h-full rounded-lg`}>
     <Image 
         src={src}
@@ -33,6 +35,10 @@ const CustomImage = ({
     {!isPreview && isEditable &&(
         <div className="absolute top-0 left-0 hidden
         group-hover:block">
+            <UploadImage 
+            contentId={contentId}
+            onContentChange={onContentChange}
+            />
             
         </div>
     )}
