@@ -57,5 +57,6 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
 )
 
    
-Paragragh.displayName='Paragragh'
+Paragraph.displayName = 'Paragraph'
+
 export default Paragraph

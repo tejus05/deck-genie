@@ -4,6 +4,9 @@ import { ContentItem } from '@/lib/types'
 import {motion} from 'framer-motion'
 import React, {useCallback} from 'react'
 import { DropZone } from './Editor';
+import TableComponent from '@/components/global/editor/components/TableComponent';
+import ColumnComponent from '@/app/(protected)/presentation/[presentationId]/_components/editor/ColumnComponent';
+import CustomImage from '../../../../../../components/global/editor/components/ImageComponent';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem;
@@ -83,9 +86,66 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
         </motion.div>
         )
       
-                
-        
-      
+        case 'table': 
+           return (
+             <motion.div
+               {...animationProps}
+               className="w-full h-full"
+               >
+                 <TableComponent 
+                   content={content.content as string[] []} 
+                   onChange={(newContent) =>
+                     onContentChange(
+                            content.id,
+                       newContent !== null ? newContent : ''
+                     )
+                   }
+                   initialRowSize={content.initialColumns}
+                   initialColSize={content.initialRows}
+                   isPreview={isPreview}
+                   isEditable={isEditable}
+                 />
+               </motion.div>      
+           )
+
+        case 'resizable-column':
+          if(Array.isArray(content.content)){
+            return (
+              <motion.div
+                {...animationProps}
+                className="w-full h-full"
+              >
+                <ColumnComponent
+                  content={content.content as ContentItem[]} 
+                  className={content.className}
+                  onContentChange={onContentChange}
+                  slideId={slideId}
+                  isPreview={isPreview}
+                  isEditable={isEditable}
+                />
+              </motion.div>
+            )
+          }
+
+          return null
+
+        case 'image':
+          return (
+          <motion.div
+            {...animationProps}
+            className="w-full h-full"
+          >
+            <CustomImage 
+              src={content.content as string}
+              alt={content.alt || 'image'}
+              className={content.className}
+              isPreview={isPreview}
+              contentId={content.id}
+              onContentChange={onContentChange}
+              isEditable={isEditable}
+            />
+          </motion.div>
+          )
 
         case 'column':
   if (Array.isArray(content.content)) {
