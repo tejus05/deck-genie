@@ -1,5 +1,6 @@
 import { useSlideStore } from '@/store/useSlideStore';
 import React from 'react';
+import DraggableSlidePreview from './DraggableSlidePreview';
 
 type Props = {};
 
@@ -7,13 +8,18 @@ const LayoutPreview = (props: Props) => {
     const { getOrderedSlides, reorderSlides } = useSlideStore();
     const slides = getOrderedSlides();
     const [loading, setLoading] = useState(true);
+
+    const moveSlide = (dragIndex: number, hoverIndex: number) =>
+    {
+       reorderSlides(dragIndex, hoverIndex)
+    }
     
     useEffect(() => {
-        if(typeof window !=== "undefined") setLoading(false)
+        if(typeof window !== "undefined") setLoading(false)
     },[])
   
     return (
-      <div className="w-64 h-full fixed left-0 top-20 border-r overflow-y-auto">
+      <div className="w-72 h-full fixed left-0 top-20 border-r overflow-y-auto">
         <ScrollArea
           className="h-full w-full"
           suppressHydrationWarning
@@ -37,15 +43,15 @@ const LayoutPreview = (props: Props) => {
                         {slides?.length} slides
                     </span>
                 </div>
-                {/* WIP: add draggable slide preview after you build the editor*/}
-                {/*{slides.map((slide, index) => (
-                    <DraggableSlidePreview 
+                
+                {slides.map((slide, index) => (
+                    <DraggableSlidePreview
                        key={slide.id || index}
                        slide={slide}
                        index={index}
                        moveSlide={moveSlide}
                        />
-                ))}*/}
+                ))}
             </div>
           )}
         </ScrollArea>

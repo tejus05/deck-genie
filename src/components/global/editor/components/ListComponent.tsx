@@ -174,6 +174,41 @@ const NumberedList: React.FC<ListProps> = ({
         }
       }
 
+      const haandleChange = (index: number, value: string) => {
+        if(isEditable) {
+          const newItems = [...items]
+          newItems[index] =
+           value.startsWith('[ ] ') || value.startsWith('[x] ')
+             ? value
+             : `[ ] ${value}`
+          onChange(newItems)
+        }
+      }
+
+      const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+        if(e.key === 'Enter') {
+          e.preventDefault()
+          const newItems = [...items]
+          newItems.splice(index + 1, 0, '[ ] ')
+          onChange(newItems)
+          setTimeout(() => {
+            const nextInput = document.querySelector(
+              `li:nth-child(${index + 2}) input`
+            ) as HTMLInputElement
+            if (nextInput) nextInput.focus()
+          }, 0)
+        } else if(
+          e.key === 'Backspace' &&
+          items[index] === '[ ] ' &&
+          items.length > 1
+        ) {
+          e.preventDefault()
+          const newItems = [...items]
+          newItems.splice(index, 1)
+          onChange(newItems)
+        }
+      } 
+
       return (
         <ul
           className={cn('space-y-1', className)}

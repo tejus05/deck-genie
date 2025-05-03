@@ -8,6 +8,11 @@ import TableComponent from '@/components/global/editor/components/TableComponent
 import ColumnComponent from '@/app/(protected)/presentation/[presentationId]/_components/editor/ColumnComponent';
 import CustomImage from '../../../../../../components/global/editor/components/ImageComponent';
 import Paragraph from '@/components/global/editor/components/Paragragh';
+import CalloutBox from '@/components/global/editor/components/CalloutBox';
+import CodeBlock from '@/components/global/editor/components/CodeBlock';
+import { cn } from '@/lib/utils';
+import TableOfContents from '@/components/global/editor/components/TableOfContents';
+import Divider from '@/components/global/editor/components/Divider';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem;
@@ -200,6 +205,62 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
       />
     </motion.div>
   )
+
+     case 'calloutBox':
+       return (
+        <motion.div
+          {...animationProps}
+          className="w-full h-full"
+        >
+          <CalloutBox
+            type={content.calloutType || 'info'}
+            className={content.className}
+          >
+            <Paragraph {...commonProps} />
+          </CalloutBox>
+        </motion.div>
+       )
+
+       case 'codeBlock':
+        return(
+          <motion.div
+            {...animationProps}
+            className="w-full h-full"
+          >
+            <CodeBlock
+              code={content.code}
+              language={content.language}
+              onChange={() => {}}
+              className={content.className}
+            />
+          </motion.div>
+        )
+
+        case 'tableOfContents':
+          return (
+            <motion.div
+              {...animationProps}
+              className="w-full h-full"
+            >
+              <TableOfContents
+                items={content.content as string []}
+                onItemClick={(id) => {
+                  console.log(`Navigate to section: ${id}`)
+                }}
+                className={content.className}
+              />
+            </motion.div>
+          )
+
+        case 'divider':
+          return (
+            <motion.div
+              {...animationProps}
+              className="w-full h-full"
+            >
+              <Divider className={content.className as string} />
+            </motion.div>
+          )
 
         case 'column':
   if (Array.isArray(content.content)) {
