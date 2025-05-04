@@ -1,5 +1,6 @@
 "use server"
 
+import { client } from '@/lib/prisma'
 import {onAuthenticateUser} from './user'
 export const getAllProjects = async () => {
     try{
@@ -170,5 +171,26 @@ export const createProject = async (title: string, outlines: OutlineCard[]) => {
     } catch (error) {
         console.log('🔴 ERROR', error);
         return { status: 500 , error:'Intenal Server Error'};
+    }
+  }
+
+  export const updateSlides = async (projectId: string, slides: JsonValue) => {
+    try {
+        if (!projectId || !slides) {
+            return { status: 400, error: 'Project ID and slides are required.' };
+        }
+
+        const updatedProject = await client.project.update({
+            where: { id: projectId },
+            data: { slides },
+        })
+
+        if (!updatedProject) {
+            return { status: 500, error: 'Failed to update slides' };
+        }
+        return { status: 200, data: updatedProject }
+    } catch (error) {
+        console.log('🔴 ERROR', error);
+        return { status: 500, error: 'Internal server error' };
     }
   }

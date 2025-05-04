@@ -1,4 +1,6 @@
 import Home from "@/app/page";
+import { LayoutGroup } from "./types";
+import { BlankCardIcon, ImageAndTextIcon, TextAndImageIcon } from "./iconsComponent";
 
 export const data = {
     user:{
@@ -74,3 +76,53 @@ export const CreatePageCard = {
       type: 'create-scratch',
    },
 }
+
+export const layouts: LayoutGroup[] = [
+   {
+      name: 'Basic',
+      layouts: [
+         {
+            name: 'Blank card',
+            icon: BlankCardIcon,
+            type: 'layout',
+            layoutType: 'blank-card',
+            component: BlankCard,
+         },
+         {
+            name: 'Image and text',
+            icon: ImageAndTextIcon,
+            type: 'layout',
+            layoutType: 'imageAndText',
+            component: ImageAndText,
+         }
+         {
+            name: 'Text and image',
+            icon: TextAndImageIcon,
+            type: 'layout',
+            layoutType: 'textAndImage',
+            component: TextAndImage,
+         },
+         {
+            name: 'Two images',
+            icon: Two,
+            type: 'layout',
+            layoutType: 'twoImages',
+            component: TwoImages,
+         },
+         {
+            name: 'Two text',
+            icon: TwoTextIcon,
+            type: 'layout',
+            layoutType: 'twoText',
+            component: TwoText,
+         },
+         {
+            name: 'Three text',
+            icon: ThreeTextIcon,
+            type: 'layout',
+            layoutType: 'threeText',
+            component: ThreeText,
+         }
+         
+      ]
+   }
